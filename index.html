@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operating System Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .progress-container {
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .quiz-container {
+            display: none;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .question-number {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .question-text {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            padding: 12px 15px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option:hover {
+            background-color: #f1f8ff;
+            border-color: #3498db;
+        }
+        
+        .option.selected {
+            background-color: #e1f0fa;
+            border-color: #3498db;
+        }
+        
+        .option.correct {
+            background-color: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .option.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .start-screen, .results-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .start-screen h2, .results-screen h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .start-screen p, .results-screen p {
+            margin-bottom: 30px;
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .score {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3498db;
+            margin: 20px 0;
+        }
+        
+        .results-details {
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .result-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        
+        .result-item.correct {
+            border-left: 4px solid #28a745;
+        }
+        
+        .result-item.incorrect {
+            border-left: 4px solid #dc3545;
+        }
+        
+        .result-question {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .result-answer {
+            color: #7f8c8d;
+        }
+        
+        .highlight {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Operating System Quiz</h1>
+            <p class="description">Test your knowledge of operating systems, Linux commands, and system administration</p>
+        </header>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="progress-text">
+                <span id="current-question">0</span> / <span id="total-questions">77</span>
+            </div>
+        </div>
+        
+        <div class="start-screen" id="start-screen">
+            <h2>Ready to Test Your OS Knowledge?</h2>
+            <p>This quiz contains 77 questions covering operating system concepts, Linux commands, process management, file systems, and more.</p>
+            <button id="start-btn">Start Quiz</button>
+        </div>
+        
+        <div class="quiz-container" id="quiz-container">
+            <div class="question" id="question-container">
+                <!-- Question content will be inserted here by JavaScript -->
+            </div>
+            
+            <div class="navigation">
+                <button id="prev-btn" disabled>Previous</button>
+                <button id="next-btn">Next</button>
+            </div>
+        </div>
+        
+        <div class="results-screen" id="results-screen" style="display: none;">
+            <h2>Quiz Completed!</h2>
+            <p>Your results are below:</p>
+            <div class="score" id="score">0/77</div>
+            <div class="results-details" id="results-details">
+                <!-- Results will be inserted here by JavaScript -->
+            </div>
+            <button id="restart-btn">Take Quiz Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data - all 77 questions
+        const quizData = [
+            {
+                question: "1. Which command is used to display the disk usage of files and directories in a human-readable format?",
+                options: [
+                    "a) du -h",
+                    "b) ls -h",
+                    "c) df -h",
+                    "d) disk -h"
+                ],
+                correct: 0
+            },
+            {
+                question: "2. Which of the following is not a state in the process life cycle?",
+                options: [
+                    "a) Ready - the process is prepared to run and is waiting for CPU time",
+                    "b) Running - the process is currently being executed by the CPU",
+                    "c) Waiting - the process is waiting for some event (like I/O)",
+                    "d) Sleeping"
+                ],
+                correct: 3
+            },
+            {
+                question: "3. Which of the following is not a type of device interrupt?",
+                options: [
+                    "a) Software interrupt",
+                    "b) Hardware interrupt - generated by external hardware devices",
+                    "c) Timer interrupt - generated by the system timer",
+                    "d) I/O interrupt - generated by I/O devices"
+                ],
+                correct: 0
+            },
+            {
+                question: "4. What is the purpose of network operating system?",
+                options: [
+                    "a) to provide file management and administration",
+                    "b) to provide network management and administration",
+                    "c) to provide process management and administration",
+                    "d) to provide device management and administration"
+                ],
+                correct: 1
+            },
+            {
+                question: "5. What does the command \"df -h\" do in Linux?",
+                options: [
+                    "a) it displays information about the system's network interfaces",
+                    "b) it displays the amount of free memory on the system",
+                    "c) it display the amount of used disk space on the system",
+                    "d) it displays the amount of free disk space in the system"
+                ],
+                correct: 3
+            },
+            {
+                question: "6. Which command is used to delete a file?",
+                options: [
+                    "a) cp - copy files",
+                    "b) ls - list files",
+                    "c) mv - move or rename files",
+                    "d) rm"
+                ],
+                correct: 3
+            },
+            {
+                question: "7. Which of the following scheduling algorithms is optimal?",
+                options: [
+                    "a) Shortest job first",
+                    "b) None of the above are optimal",
+                    "c) Round Robin - good for fairness, but not optimal in terms of average waiting time",
+                    "d) First Come, First Served - can have very high waiting time"
+                ],
+                correct: 1
+            },
+            {
+                question: "8. Which of the following is true about the \"rar\" command?",
+                options: [
+                    "a) it is used to create ZIP archives - this is done using zip",
+                    "b) it is used to compress and decompress files using the RAR format",
+                    "c) it is used to create tar archives - done using tar",
+                    "d) it is used to create RAR archives - this is true but incomplete because rar also extracts rar archives"
+                ],
+                correct: 1
+            },
+            {
+                question: "9. What command is designed to show socket statistics and supports all the major packet and socket types?",
+                options: [
+                    "a) route - displays the routing tables",
+                    "b) ss",
+                    "c) ping - checks network connectivity",
+                    "d) dig - DNS lookup tool"
+                ],
+                correct: 1
+            },
+            {
+                question: "10. What is the main difference between a monolithic kernel and a microkernel?",
+                options: [
+                    "a) a microkernel provides more services that a monolithic kernel",
+                    "b) in a monolithic kernel, all operating system services run in kernel space, while in a microkernel, only essential services run in kernel space and the rest run as user processes",
+                    "c) a monolithic kernel is smaller and faster that a microkernel",
+                    "d) a microkernel is more complex than a monolithic kernel"
+                ],
+                correct: 1
+            },
+            {
+                question: "11. Which command is used to view the contents of a file in real-time as new lines are added to the file?",
+                options: [
+                    "a) tail",
+                    "b) less - lets you scroll through a file",
+                    "c) head - show beginning of a file",
+                    "d) watch - repeatedly runs a command"
+                ],
+                correct: 0
+            },
+            {
+                question: "12. What is the main function of the kernel in an operating system?",
+                options: [
+                    "a) to manage user accounts and passwords - handles by system utilities",
+                    "b) to manage hardware resources and provide services to applications",
+                    "c) to run system backup and recovery procedures",
+                    "d) to provide a graphical user interface for the user - that's done by desktop environments/window systems"
+                ],
+                correct: 1
+            },
+            {
+                question: "13. Which command is used to decompress a file compressed with gzip?",
+                options: [
+                    "a) compress - used for older .Z compression",
+                    "b) tar - archives files; can work with gzip using tar -xzf, but tar itself is not the decompression tool",
+                    "c) unzip - used for ZIP files",
+                    "d) gunzip"
+                ],
+                correct: 3
+            },
+            {
+                question: "14. Which of the following is a disadvantage of a monolithic kernel architecture?",
+                options: [
+                    "a) it is less efficient than a microkernel architecture",
+                    "b) it is more difficult to add new features or drivers",
+                    "c) it provides less protection against crashes and failures",
+                    "d) it is less secure than a microkernel architecture"
+                ],
+                correct: 2
+            },
+            {
+                question: "15. What is the output of the following command? grep -v \"Linux\" file.txt",
+                options: [
+                    "a) displays only the lines not containing \"Linux\" in file.txt",
+                    "b) deletes the lines containing \"Linux\" in the file.txt",
+                    "c) displays only the lines containing \"Linux\" in file.txt",
+                    "d) deletes the lines not containing \"Linux\" in file.txt"
+                ],
+                correct: 0
+            },
+            {
+                question: "16. Which of the following commands will change the current working directory to the directory specified by the absolute path '/home/user/Documents/folder1'?",
+                options: [
+                    "a) cd /user/home/Documents/folder1",
+                    "b) cd ~/Documents/folder1",
+                    "c) cd ./Documents/folder1",
+                    "d) cd /home/user/Documents/folder1"
+                ],
+                correct: 3
+            },
+            {
+                question: "17. Which command displays a brief summary of a command's purpose and usage in Linux?",
+                options: [
+                    "a) help - shows detailed help for shell built-in commands",
+                    "b) whatis",
+                    "c) info - give detailed documentation",
+                    "d) man - opens the manual page"
+                ],
+                correct: 1
+            },
+            {
+                question: "18. Which of the following is not a type of CPU utilization?",
+                options: [
+                    "a) idle CPU utilization",
+                    "b) system CPU utilization",
+                    "c) user cpu utilization",
+                    "d) network cpu utilization"
+                ],
+                correct: 3
+            },
+            {
+                question: "19. Which of the following is not a characteristic of a file system?",
+                options: [
+                    "a) all the above are characteristic of a file system",
+                    "b) physical structure",
+                    "c) logical structure",
+                    "d) access methods"
+                ],
+                correct: 0
+            },
+            {
+                question: "20. What is the purpose of buffer?",
+                options: [
+                    "a) to store data temporarily",
+                    "b) to provide a user interface for a device",
+                    "c) to manage device queues",
+                    "d) to allocate resources for a device"
+                ],
+                correct: 0
+            },
+            {
+                question: "21. What is the difference between a file and a directory in linux?",
+                options: [
+                    "a) a file is a collection of data while a directory is a container for files and other directories",
+                    "b) a file contains only text while a directory contains multimedia files",
+                    "c) a file is read-only while a directory is read-write",
+                    "d) a file cannot be deleted while a directory can be deleted"
+                ],
+                correct: 0
+            },
+            {
+                question: "22. Which of the following commands would you use to display a list of all available commands in Linux?",
+                options: [
+                    "a) commands",
+                    "b) list",
+                    "c) help",
+                    "d) apropos"
+                ],
+                correct: 3
+            },
+            {
+                question: "23. How do you check your current username in Linux?",
+                options: [
+                    "a) user",
+                    "b) uname - displays system information",
+                    "c) me",
+                    "d) whoami"
+                ],
+                correct: 3
+            },
+            {
+                question: "24. Which of the following commands changes permission of a file?",
+                options: [
+                    "a) chown - changes the owner of a file, not its permission",
+                    "b) chperm",
+                    "c) change",
+                    "d) chmod"
+                ],
+                correct: 3
+            },
+            {
+                question: "25. What is the purpose of the PATH variable?",
+                options: [
+                    "a) to store username",
+                    "b) to store list of directories where the system searches for executables",
+                    "c) to store default shell prompt",
+                    "d) to store current date"
+                ],
+                correct: 1
+            },
+            {
+                question: "26. Which of the following is a core function of an operating system?",
+                options: [
+                    "a) sending emails -> done by application not by OS",
+                    "b) compiling source code -> done by compilers, which are programs",
+                    "c) editing text files -> done by the text editors, not a core OS function",
+                    "d) managing hardware and software resources"
+                ],
+                correct: 3
+            },
+            {
+                question: "27. Which command is used to count lines, words, and characters in a file?",
+                options: [
+                    "a) count",
+                    "b) grep -> search for patterns in a file",
+                    "c) lines",
+                    "d) wc"
+                ],
+                correct: 3
+            },
+            {
+                question: "28. Which command is used to find a file by name in Linux?",
+                options: [
+                    "a) search",
+                    "b) B and C",
+                    "c) locate",
+                    "d) find"
+                ],
+                correct: 1
+            },
+            {
+                question: "29. What will the following print? echo \"Linux\" | tr 'A-Za-z' 'N-ZA-Mn-za-m'",
+                options: [
+                    "a) ROT13 of Linux",
+                    "b) A garbage string",
+                    "c) linux",
+                    "d) Yvafhk"
+                ],
+                correct: 3
+            },
+            {
+                question: "30. Which command displays your current working directory?",
+                options: [
+                    "a) ls",
+                    "b) cd",
+                    "c) pwd",
+                    "d) home"
+                ],
+                correct: 2
+            },
+            {
+                question: "31. to create a compressed archive named backup.tar.gz from /home/user:",
+                options: [
+                    "a) zip backup.tar.gz /home/user",
+                    "b) tar -czvf backup.tar.gz /home/user",
+                    "c) gzip /home/user backup.tar.gz",
+                    "d) compress /home/user backup.tar.gz"
+                ],
+                correct: 1
+            },
+            {
+                question: "32. What does the command 'alias || = \"ls -ls\"' do?",
+                options: [
+                    "a) lists files only",
+                    "b) deletes ls command",
+                    "c) creates a shortcut command for \"ls -la\"",
+                    "d) lists only directories"
+                ],
+                correct: 2
+            },
+            {
+                question: "33. sequence that redirects stderr to stdout:",
+                options: [
+                    "a) command &> file",
+                    "b) command > file 2>&1",
+                    "c) command > &2",
+                    "d) command 2 > &1 > file"
+                ],
+                correct: 1
+            },
+            {
+                question: "34. Which command displays only the process IDs of all running \"ssh\" processes?",
+                options: [
+                    "a) ps -aux | grep ssh",
+                    "b) ps -C ssh -o pid=",
+                    "c) pgrep -a ssh",
+                    "d) top | grep ssh"
+                ],
+                correct: 1
+            },
+            {
+                question: "35. What does 'sudo' stand for?",
+                options: [
+                    "a) Super User DO",
+                    "b) System User Domain",
+                    "c) Substitute User and Do",
+                    "d) Subdirectory Utility"
+                ],
+                correct: 0
+            },
+            {
+                question: "36. The 'man' command is used to:",
+                options: [
+                    "a) run a program as another user",
+                    "b) display manual pages for a command",
+                    "c) create a new user",
+                    "d) display a file's contents"
+                ],
+                correct: 1
+            },
+            {
+                question: "37. What does the command do? chmod 755 file.sh",
+                options: [
+                    "a) changes ownership",
+                    "b) removes read permission for owner",
+                    "c) gives execute permission to everyone",
+                    "d) removes all permissions"
+                ],
+                correct: 2
+            },
+            {
+                question: "38. to schedule a task to run later, which command is used?",
+                options: [
+                    "a) at",
+                    "b) delay",
+                    "c) cron",
+                    "d) run"
+                ],
+                correct: 0
+            },
+            {
+                question: "39. What command displays network interfaces?",
+                options: [
+                    "a) hostname",
+                    "b) ifconfig or ip addr",
+                    "c) netstat",
+                    "d) ping"
+                ],
+                correct: 1
+            },
+            {
+                question: "40. Which command displays system date and time?",
+                options: [
+                    "a) date",
+                    "b) time",
+                    "c) timed",
+                    "d) sysdate"
+                ],
+                correct: 0
+            },
+            {
+                question: "41. Which command compresses a file using gzip?",
+                options: [
+                    "a) compress file",
+                    "b) tar file",
+                    "c) zip file",
+                    "d) gzip file"
+                ],
+                correct: 3
+            },
+            {
+                question: "42. How to switch to another user in Linux?",
+                options: [
+                    "a) switch user",
+                    "b) su username",
+                    "c) change user username",
+                    "d) user switch username"
+                ],
+                correct: 1
+            },
+            {
+                question: "43. Which command shows environment variables?",
+                options: [
+                    "a) env",
+                    "b) getenv",
+                    "c) showenv",
+                    "d) variables"
+                ],
+                correct: 0
+            },
+            {
+                question: "44. the symbol '|' (pipe) is used to:",
+                options: [
+                    "a) execute commands in background -> done using &",
+                    "b) combine files -> done using cat or paste",
+                    "c) redirect input and output between commands",
+                    "d) separate two commands -> done using ; or &&"
+                ],
+                correct: 2
+            },
+            {
+                question: "45. to extract a tar.gz file",
+                options: [
+                    "a) unzip file.tar.gz",
+                    "b) extract file.tar.gz",
+                    "c) gzip -d file.tar.gz",
+                    "d) tar -xvzf file.tar.gz"
+                ],
+                correct: 3
+            },
+            {
+                question: "46. what will happen after executing: echo $((10 > 5))",
+                options: [
+                    "a) prints true",
+                    "b) prints nothing",
+                    "c) prints 1",
+                    "d) prints false"
+                ],
+                correct: 2
+            },
+            {
+                question: "47. Which cron expression runs a script every Monday at 3:30 PM?",
+                options: [
+                    "a) 30 15 1 * 1 /home/user/script.sh",
+                    "b) 30 15 ** 1 /home/user/script.sh",
+                    "c) 15 30 1 ** /home/user/script.sh",
+                    "d) 30 15 * 1 * /home/user/script.sh"
+                ],
+                correct: 3
+            },
+            {
+                question: "48. to display only the first 5 lines of a file:",
+                options: [
+                    "a) head -5 filename",
+                    "b) tail -5 filename",
+                    "c) show filename 5",
+                    "d) cat filename | grep 5"
+                ],
+                correct: 0
+            },
+            {
+                question: "49. you wanna list only directories (not files) in /etc. Which works?",
+                options: [
+                    "a) find /etc -type f",
+                    "b) ls -ld /etc/* /",
+                    "c) ls -d /etc/",
+                    "d) ls /etc -dirs-only"
+                ],
+                correct: 1
+            },
+            {
+                question: "50. Command to display 10 largest files in /var/log?",
+                options: [
+                    "a) find /var/log -size + 10M",
+                    "b) ls -lhS /var/log | head -10",
+                    "c) du -sh /var/log | sort -nr | head",
+                    "d) du -ah /var/log | sort -rh | head -10"
+                ],
+                correct: 3
+            },
+            {
+                question: "51. To list processes running on the system:",
+                options: [
+                    "a) lsproc",
+                    "b) jobs",
+                    "c) ps -ef",
+                    "d) proc"
+                ],
+                correct: 2
+            },
+            {
+                question: "52. to display all files, including hidden ones, in the current directory:",
+                options: [
+                    "a) dir -all",
+                    "b) list -h",
+                    "c) ls -a",
+                    "d) ls -l"
+                ],
+                correct: 2
+            },
+            {
+                question: "53. find files modified in the last 24 hours under /home:",
+                options: [
+                    "a) find /home -mtime -1",
+                    "b) find /home -date -1 -> not a valid find option",
+                    "c) find /home -time -1 -> not a valid find option",
+                    "d) find /home -ctime -1 -> inode change time"
+                ],
+                correct: 0
+            },
+            {
+                question: "54. the grep command is used for:",
+                options: [
+                    "a) compressing data",
+                    "b) editing text files",
+                    "c) displaying system processes",
+                    "d) searching for patterns in text"
+                ],
+                correct: 3
+            },
+            {
+                question: "55. grep -E \"^[^#]\" /etc/ssh/sshd_config does what?",
+                options: [
+                    "a) displays all lines that are not commented out",
+                    "b) displays total number of lines",
+                    "c) prints only lines starting with #",
+                    "d) deletes comments lines"
+                ],
+                correct: 0
+            },
+            {
+                question: "56. what happens when you execute chmod 4755 script.sh?",
+                options: [
+                    "a) sets the SUID bit, so it runs with owner's privileges",
+                    "b) grants all users write access",
+                    "c) removes execution rights for everyone except owner",
+                    "d) makes file read only"
+                ],
+                correct: 0
+            },
+            {
+                question: "57. which option in the \"grep\" command is used to perform a case-insensitive search?",
+                options: [
+                    "a) -e - specifies a pattern to search",
+                    "b) -n - shows line numbers of matching lines",
+                    "c) -v - inverts the match, showing lines not containing the pattern",
+                    "d) -i"
+                ],
+                correct: 3
+            },
+            {
+                question: "58. what command would you use to search for a specific string in the contents of multiple files?",
+                options: [
+                    "a) awk -> used for text processing and pattern scanning",
+                    "b) grep",
+                    "c) find -> used to search files/directories by name, type, or attributes, not contents",
+                    "d) sed -> used for stream editing"
+                ],
+                correct: 1
+            },
+            {
+                question: "59. which processor command is used to pause a process temporarily?",
+                options: [
+                    "a) wait -> waits for a child process to finish",
+                    "b) suspend -> built-in shell command for jobs, not a general process control command.",
+                    "c) stop",
+                    "d) kill -> sends a signal to terminate or control a process; by itself, it doesn't pause."
+                ],
+                correct: 1
+            },
+            {
+                question: "60. which of the following is not a type of network management tool?",
+                options: [
+                    "a) all the above are types of network management tool",
+                    "b) network analyzer -> captures and inspects network traffic (e.g., Wireshark).",
+                    "c) network monitor -> monitors network performance, uptime, and usage.",
+                    "d) network simulator -> simulates network topologies and behavior for testing purposes (e.g., GNS3, Packet Tracer)."
+                ],
+                correct: 0
+            },
+            {
+                question: "61. what is the output of the following command? grep -c \"Linux\" file.txt",
+                options: [
+                    "a) the number of occurrences of \"Linux\" in the file.txt",
+                    "b) the number of lines in file.txt -> wc -l file.txt",
+                    "c) the number of lines in the current directory containing \"Linux\" -> grep works on files, not directories unless explicitly",
+                    "d) the number of directories in the current directory containing \"Linux\" -> irrelevant, grep does not count directories"
+                ],
+                correct: 0
+            },
+            {
+                question: "62. what is the output of the following command? sort -u file.txt",
+                options: [
+                    "a) sorts the file in normal order",
+                    "b) sorts the file and removes duplicate lines",
+                    "c) sorts the line in random order",
+                    "d) sorts the line in reverse order"
+                ],
+                correct: 1
+            },
+            {
+                question: "63. Which command is used to view the process status in Linux?",
+                options: [
+                    "a) ps",
+                    "b) ls",
+                    "c) mv",
+                    "d) cp"
+                ],
+                correct: 0
+            },
+            {
+                question: "64. which of the following is a characteristic of real time operating system?",
+                options: [
+                    "a) it has a fixed maximum response time",
+                    "b) it doesn't prioritize tasks",
+                    "c) it is not concerned with response time",
+                    "d) it is optimized for general purpose computing"
+                ],
+                correct: 0
+            },
+            {
+                question: "65. what does the command \"cat file.txt | grep pattern\" do in Linux?",
+                options: [
+                    "a) it creates a new file called pattern.txt and copies the contents of file.txt to it",
+                    "b) it displays the contents of file.txt and searches for the pattern in the output",
+                    "c) it replaces the pattern in file.txt with new text",
+                    "d) it display only the lines in file.txt that match the pattern"
+                ],
+                correct: 3
+            },
+            {
+                question: "66. what is a firewall?",
+                options: [
+                    "a) a type of device driver",
+                    "b) a type of file system",
+                    "c) a type of process",
+                    "d) a network security device that monitors and controls incoming and outgoing network traffic"
+                ],
+                correct: 3
+            },
+            {
+                question: "67. _____ is space on the hard disk that is used like physical memory when the amount of physical memory becomes low.",
+                options: [
+                    "a) swap memory",
+                    "b) cpu",
+                    "c) kernel space",
+                    "d) user space"
+                ],
+                correct: 0
+            },
+            {
+                question: "68. what is the kernel?",
+                options: [
+                    "a) the part of an operating system that manages hardware resources",
+                    "b) the part of an operating system that manages software resources",
+                    "c) the part of an operating system that connects to the internet",
+                    "d) the user interface of an operating system"
+                ],
+                correct: 0
+            },
+            {
+                question: "69. what is a device driver?",
+                options: [
+                    "a) a program that manages computer networking",
+                    "b) a program that manages computer software",
+                    "c) a program that manages computer security",
+                    "d) a program that manages computer hardware"
+                ],
+                correct: 3
+            },
+            {
+                question: "70. what is the role of the scheduler in processor management?",
+                options: [
+                    "a) to allocate resources to processes",
+                    "b) to allocate resources to network operations",
+                    "c) to allocate resources to I/O operations",
+                    "d) to allocate resources to memory"
+                ],
+                correct: 0
+            },
+            {
+                question: "71. which processor command is used to view and manage kernel-level threads on a system?",
+                options: [
+                    "a) top",
+                    "b) ps",
+                    "c) thread",
+                    "d) kill"
+                ],
+                correct: 1
+            },
+            {
+                question: "72. Which of the following is an example of a network operating system?",
+                options: [
+                    "a) macOS",
+                    "b) Windows 10",
+                    "c) Linux",
+                    "d) Novell Netware"
+                ],
+                correct: 3
+            },
+            {
+                question: "73. which command can be used to extract a single file from a ZIP archive?",
+                options: [
+                    "a) tar",
+                    "b) gzip",
+                    "c) zcat",
+                    "d) unzip"
+                ],
+                correct: 3
+            },
+            {
+                question: "74. which of the following is a disadvantage of a distributed operating system?",
+                options: [
+                    "a) it allows for better resource utilization",
+                    "b) it provides stronger security that a centralized system",
+                    "c) it is easier to implement that centralized system",
+                    "d) it is less complex than a centralized system"
+                ],
+                correct: 2
+            },
+            {
+                question: "75. what is the purpose of the --help option in linux?",
+                options: [
+                    "a) it displays a list of available options and their usage",
+                    "b) it provides a detailed explanation of how the command works",
+                    "c) it provides examples of how to use the command in different scenarios",
+                    "d) it displays information on the version of the command"
+                ],
+                correct: 0
+            },
+            {
+                question: "76. which of the following commands is used to display the contents of a file on the terminal?",
+                options: [
+                    "a) ls",
+                    "b) cp",
+                    "c) cat",
+                    "d) cd"
+                ],
+                correct: 2
+            },
+            {
+                question: "77. Which command is used to display the contents of a compressed file without extracting it?",
+                options: [
+                    "a) tar",
+                    "b) cat",
+                    "c) gzip",
+                    "d) unzip"
+                ],
+                correct: 0
+            }
+        ];
+
+        // DOM elements
+        const startScreen = document.getElementById('start-screen');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsScreen = document.getElementById('results-screen');
+        const questionContainer = document.getElementById('question-container');
+        const progressBar = document.getElementById('progress');
+        const currentQuestionEl = document.getElementById('current-question');
+        const totalQuestionsEl = document.getElementById('total-questions');
+        const scoreEl = document.getElementById('score');
+        const resultsDetails = document.getElementById('results-details');
+        
+        const startBtn = document.getElementById('start-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        
+        // Quiz state
+        let currentQuestion = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let score = 0;
+        
+        // Initialize the quiz
+        function initQuiz() {
+            totalQuestionsEl.textContent = quizData.length;
+            startScreen.style.display = 'block';
+            quizContainer.style.display = 'none';
+            resultsScreen.style.display = 'none';
+        }
+        
+        // Start the quiz
+        function startQuiz() {
+            startScreen.style.display = 'none';
+            quizContainer.style.display = 'block';
+            currentQuestion = 0;
+            userAnswers.fill(null);
+            showQuestion();
+        }
+        
+        // Show current question
+        function showQuestion() {
+            const question = quizData[currentQuestion];
+            currentQuestionEl.textContent = currentQuestion + 1;
+            
+            // Update progress bar
+            const progressPercent = ((currentQuestion + 1) / quizData.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+            
+            // Create question HTML
+            let questionHTML = `
+                <div class="question-number">Question ${currentQuestion + 1} of ${quizData.length}</div>
+                <div class="question-text">${question.question}</div>
+                <div class="options">
+            `;
+            
+            question.options.forEach((option, index) => {
+                const isSelected = userAnswers[currentQuestion] === index;
+                questionHTML += `
+                    <div class="option ${isSelected ? 'selected' : ''}" data-index="${index}">
+                        ${option}
+                    </div>
+                `;
+            });
+            
+            questionHTML += `</div>`;
+            questionContainer.innerHTML = questionHTML;
+            
+            // Add event listeners to options
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', selectOption);
+            });
+            
+            // Update navigation buttons
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.textContent = currentQuestion === quizData.length - 1 ? 'Finish' : 'Next';
+        }
+        
+        // Select an option
+        function selectOption(e) {
+            const selectedOption = e.currentTarget;
+            const optionIndex = parseInt(selectedOption.getAttribute('data-index'));
+            
+            // Deselect all options
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Select clicked option
+            selectedOption.classList.add('selected');
+            
+            // Save user's answer
+            userAnswers[currentQuestion] = optionIndex;
+        }
+        
+        // Navigate to previous question
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+        
+        // Navigate to next question or finish quiz
+        function nextQuestion() {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+        
+        // Finish the quiz and show results
+        function finishQuiz() {
+            // Calculate score
+            score = 0;
+            quizData.forEach((question, index) => {
+                if (userAnswers[index] === question.correct) {
+                    score++;
+                }
+            });
+            
+            // Update score display
+            scoreEl.textContent = `${score}/${quizData.length}`;
+            
+            // Generate results details
+            let resultsHTML = '';
+            quizData.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer === question.correct;
+                
+                resultsHTML += `
+                    <div class="result-item ${isCorrect ? 'correct' : 'incorrect'}">
+                        <div class="result-question">${index + 1}. ${question.question}</div>
+                        <div class="result-answer">
+                            Your answer: ${userAnswer !== null ? question.options[userAnswer] : 'Not answered'}<br>
+                            ${!isCorrect ? `Correct answer: <span class="highlight">${question.options[question.correct]}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            resultsDetails.innerHTML = resultsHTML;
+            
+            // Show results screen
+            quizContainer.style.display = 'none';
+            resultsScreen.style.display = 'block';
+        }
+        
+        // Restart the quiz
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers.fill(null);
+            startQuiz();
+        }
+        
+        // Event listeners
+        startBtn.addEventListener('click', startQuiz);
+        prevBtn.addEventListener('click', prevQuestion);
+        nextBtn.addEventListener('click', nextQuestion);
+        restartBtn.addEventListener('click', restartQuiz);
+        
+        // Initialize the quiz
+        initQuiz();
+    </script>
+</body>
+</html>
