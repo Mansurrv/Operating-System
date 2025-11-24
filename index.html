@@ -226,13 +226,13 @@
                 <div class="progress" id="progress"></div>
             </div>
             <div class="progress-text">
-                <span id="current-question">0</span> / <span id="total-questions">77</span>
+                <span id="current-question">0</span> / <span id="total-questions">102</span>
             </div>
         </div>
         
         <div class="start-screen" id="start-screen">
             <h2>Ready to Test Your OS Knowledge?</h2>
-            <p>This quiz contains 77 questions covering operating system concepts, Linux commands, process management, file systems, and more.</p>
+            <p>This quiz contains 102 questions covering operating system concepts, Linux commands, process management, file systems, and more.</p>
             <button id="start-btn">Start Quiz</button>
         </div>
         
@@ -250,7 +250,7 @@
         <div class="results-screen" id="results-screen" style="display: none;">
             <h2>Quiz Completed!</h2>
             <p>Your results are below:</p>
-            <div class="score" id="score">0/77</div>
+            <div class="score" id="score">0/102</div>
             <div class="results-details" id="results-details">
                 <!-- Results will be inserted here by JavaScript -->
             </div>
@@ -259,7 +259,7 @@
     </div>
 
     <script>
-        // Quiz data - all 77 questions
+        // Quiz data - all 102 questions
         const quizData = [
             {
                 question: "1. Which command is used to display the disk usage of files and directories in a human-readable format?",
@@ -1030,6 +1030,256 @@
                     "d) unzip"
                 ],
                 correct: 0
+            },
+            {
+                question: "78. what is the purpose of the \"grep\" command in Linux?",
+                options: [
+                    "a) it displays the last few lines of a file",
+                    "b) it sorts the contents of a file or input stream in alphabetical order",
+                    "c) it searches for a specific text pattern in a file or input stream",
+                    "d) it compresses one or more files into a single archive"
+                ],
+                correct: 2
+            },
+            {
+                question: "79. which command is used to move a file in linux?",
+                options: [
+                    "a) mv",
+                    "b) cp",
+                    "c) rename",
+                    "d) move"
+                ],
+                correct: 0
+            },
+            {
+                question: "80. what is the purpose of the \"bzip2\" command?",
+                options: [
+                    "a) to decompress a file that has been compressed with bzip2",
+                    "b) to compress a file using \"bzip2\" compression",
+                    "c) to create a zip archive with bzip2 compression",
+                    "d) to list the contents of a file that has been compressed with bzip2"
+                ],
+                correct: 1
+            },
+            {
+                question: "81. what is the goal of process scheduling?",
+                options: [
+                    "a) to maximize i/o utilization",
+                    "b) to maximize cpu utilization",
+                    "c) to minimize cpu utilization",
+                    "d) to minimize i/o utilization"
+                ],
+                correct: 1
+            },
+            {
+                question: "82. what is the purpose of the \"--help\" option in linux commands?",
+                options: [
+                    "a) it displays the commands version number",
+                    "b) it displays a summary of the commands options and usage",
+                    "c) it prints the commands output to a file",
+                    "d) it enables debugging mode for the command"
+                ],
+                correct: 1
+            },
+            {
+                question: "83. what is the purpose of a path name?",
+                options: [
+                    "a) to store file attributes",
+                    "b) to manage file queues",
+                    "c) to uniquely identify in the file system",
+                    "d) to allocate recources to a file"
+                ],
+                correct: 2
+            },
+            {
+                question: "84. which of the following scheduling algorithms is preemptive?",
+                options: [
+                    "a) Shortest Job First",
+                    "b) First-Come, First-Served",
+                    "c) Round Robin",
+                    "d) All of the above are non preemptive"
+                ],
+                correct: 2
+            },
+            {
+                question: "85. Which of the following is a type of a file allocation method?",
+                options: [
+                    "a) linked allocation",
+                    "b) indexed allocation",
+                    "c) all of the above",
+                    "d) direct allocation"
+                ],
+                correct: 2
+            },
+            {
+                question: "86. what is the purpose of memory management?",
+                options: [
+                    "a) to translate memory requests to dist operations",
+                    "b) all of the above",
+                    "c) to allocate and deallocate memory for processes",
+                    "d) to manage memory queues"
+                ],
+                correct: 2
+            },
+            {
+                question: "87. which of the following is a preemptive multitasking operating system?",
+                options: [
+                    "a) windows 10",
+                    "b) windows 95",
+                    "c) windows xp",
+                    "d) windows 7"
+                ],
+                correct: 0
+            },
+            {
+                question: "88. which processor command is used to change the priority of a process?",
+                options: [
+                    "a) top",
+                    "b) nice",
+                    "c) kill",
+                    "d) renice"
+                ],
+                correct: 3
+            },
+            {
+                question: "89. which of the following is not a function of an operating system?",
+                options: [
+                    "a) network communication",
+                    "b) memory management",
+                    "c) file management",
+                    "d) resource allocation"
+                ],
+                correct: 0
+            },
+            {
+                question: "90. _____ is used to prevent other users from deleting files that they do not own in a shared directory.",
+                options: [
+                    "a) metadata",
+                    "b) setuid",
+                    "c) sticky bit permission",
+                    "d) setgit"
+                ],
+                correct: 2
+            },
+            {
+                question: "91. what is the purpose of the \"whatis\" command in linux?",
+                options: [
+                    "a) it provides a list of available commands in system",
+                    "b) it displays a short description of a command or function",
+                    "c) it provides detailed information on how commands work",
+                    "d) it displays the manual page for a specific command"
+                ],
+                correct: 1
+            },
+            {
+                question: "92. what is the purpose of a network operating system?",
+                options: [
+                    "a) to provide process management and administration",
+                    "b) to provide device management and administration",
+                    "c) to provide file management and administration",
+                    "d) to provide network management and administration"
+                ],
+                correct: 3
+            },
+            {
+                question: "93. which command is used to display the file and directory permissions in octal format?",
+                options: [
+                    "a) ls -l",
+                    "b) chmod",
+                    "c) chown",
+                    "d) stat"
+                ],
+                correct: 3
+            },
+            {
+                question: "94. why is the difference between a file and a directory in linux?",
+                options: [
+                    "a) a file is a collection of data while a directory is a container for files and other directories",
+                    "b) a file is read-only while directory is read-write",
+                    "c) a file cannot be deleted while a directory can be deleted",
+                    "d) a file contains only text while a directory contains multimedia files"
+                ],
+                correct: 0
+            },
+            {
+                question: "95. what does the command \"ps aux\" do in linux?",
+                options: [
+                    "a) lists all network connections established by the system",
+                    "b) lists all users currently logged in",
+                    "c) lists all processes running on the system",
+                    "d) lists all files and directories in the current directory"
+                ],
+                correct: 2
+            },
+            {
+                question: "96. which of the following is not a type of network management tool?",
+                options: [
+                    "a) network monitor",
+                    "b) network analyzer",
+                    "c) all of the above are types of network management tool",
+                    "d) network simulator"
+                ],
+                correct: 2
+            },
+            {
+                question: "97. what command can be used to create a tar archive with gzip compression?",
+                options: [
+                    "a) tar -cfz",
+                    "b) tar -cz",
+                    "c) tar -czf",
+                    "d) tar -fcz"
+                ],
+                correct: 2
+            },
+            {
+                question: "98. what is the purpose of a file descriptor?",
+                options: [
+                    "a) to manage file queues",
+                    "b) to store file attributes",
+                    "c) to allocate resources to a file",
+                    "d) to uniquely identify a file in the file system"
+                ],
+                correct: 3
+            },
+            {
+                question: "99. which of the following is not a type of process scheduling",
+                options: [
+                    "a) medium-term scheduling",
+                    "b) all of the above are types of process scheduling",
+                    "c) short term scheduling",
+                    "d) long term scheduling"
+                ],
+                correct: 1
+            },
+            {
+                question: "100. which command is used to find out the file type of a file?",
+                options: [
+                    "a) format",
+                    "b) file",
+                    "c) type",
+                    "d) kind"
+                ],
+                correct: 1
+            },
+            {
+                question: "101. which of the following is not a method for process communication?",
+                options: [
+                    "a) locks",
+                    "b) message passing",
+                    "c) all of the above are methods for process communication",
+                    "d) shared memory"
+                ],
+                correct: 2
+            },
+            {
+                question: "102. which of the following is not a type of network security thread?",
+                options: [
+                    "a) trojan horse",
+                    "b) virus",
+                    "c) worm",
+                    "d) all of the above are types of network security threads"
+                ],
+                correct: 3
             }
         ];
 
